@@ -1,8 +1,8 @@
-FROM php:5.6-apache
+FROM php:7-apache
 MAINTAINER Pierre Cheynier <pierre.cheynier@sfr.com>
 
 ENV PHPIPAM_SOURCE https://github.com/phpipam/phpipam/archive/
-ENV PHPIPAM_VERSION 1.2
+ENV PHPIPAM_VERSION 1.3
 ENV WEB_REPO /var/www/html
 
 # Install required deb packages
@@ -30,9 +30,10 @@ RUN	tar -xzf /tmp/${PHPIPAM_VERSION}.tar.gz -C ${WEB_REPO}/ --strip-components=1
 
 # Use system environment variables into config.php
 RUN cp ${WEB_REPO}/config.dist.php ${WEB_REPO}/config.php && \
-    sed -i -e "s/\['host'\] = \"localhost\"/\['host'\] = \"mysql\"/" \
-    -e "s/\['user'\] = \"phpipam\"/\['user'\] = \"root\"/" \
-    -e "s/\['pass'\] = \"phpipamadmin\"/\['pass'\] = getenv(\"MYSQL_ENV_MYSQL_ROOT_PASSWORD\")/" \
+    sed -i -e "s/\['host'\] = \"localhost\"/\['host'\] = getenv(\"PHPIPAM_DB_HOST\")/" \
+    -e "s/\['user'\] = \"phpipam\"/\['user'\] = getenv(\"PHPIPAM_DB_USER\")/" \
+    -e "s/\['pass'\] = \"phpipamadmin\"/\['pass'\] = getenv(\"PHPIPAM_DB_PASSWORD\")/" \
+    -e "s/\['name'\] = \"phpipamadmin\"/\['name'\] = getenv(\"PHPIPAM_DB_NAME\")/" \
 	${WEB_REPO}/config.php
 
 EXPOSE 80
