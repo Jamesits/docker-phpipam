@@ -1,5 +1,5 @@
-FROM php:7-apache
-MAINTAINER Pierre Cheynier <pierre.cheynier@sfr.com>
+FROM php:apache
+MAINTAINER James Swineson <docker@public.swineson.me>
 
 ENV PHPIPAM_SOURCE https://github.com/phpipam/phpipam/archive/
 ENV PHPIPAM_VERSION 1.3
@@ -10,8 +10,10 @@ RUN a2enmod rewrite
 
 # Install required deb packages
 RUN apt-get update \
-	&& apt-get install -y git php-pear php5-curl php5-mysql php5-json php5-gmp php5-mcrypt php5-ldap libgmp-dev libmcrypt-dev \
+	&& apt-get install -y libpng12-dev libjpeg-dev zlib1g-dev libcurl4-gnutls-dev libldb-dev libldap-2.4-2 libldap2-dev libgmp-dev libmcrypt-dev \
 	&& ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
+	&& ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
+	&& ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Configure apache and required PHP modules 
