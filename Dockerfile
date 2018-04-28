@@ -20,7 +20,7 @@ RUN apt-get update \
 RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
 	&& docker-php-ext-configure gmp --with-gmp=/usr/include/x86_64-linux-gnu \
-	&& docker-php-ext-install gd curl mysqli pdo_mysql gettext gmp mcrypt sockets \
+	&& docker-php-ext-install gd curl mysqli pdo_mysql gettext gmp sockets \
 	&& echo ". /etc/environment" >> /etc/apache2/envvars 
 
 COPY php.ini /usr/local/etc/php/
